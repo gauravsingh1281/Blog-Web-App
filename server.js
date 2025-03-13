@@ -13,10 +13,28 @@ app.use(bodyParser.json());
 
 // Route to render the main page
 app.get("/", async (req, res) => {
+  function dateIstConvertor(date) {
+    const utcDate = new Date(date);
+    const options = {
+      timeZone: "Asia/Kolkata",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
+    };
+    return utcDate.toLocaleString("en-US", options) + " IST";
+  }
+
   try {
     const response = await axios.get(`${API_URL}/posts`);
     console.log(response);
-    res.render("index.ejs", { posts: response.data });
+    res.render("index.ejs", {
+      posts: response.data,
+      dateIstConverter: dateIstConvertor,
+    });
   } catch (error) {
     res.status(500).json({ message: "Error fetching posts" });
   }

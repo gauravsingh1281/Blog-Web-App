@@ -67,10 +67,29 @@ app.post("/posts", (req, res) => {
     date: new Date(),
   };
   posts.push(newPost);
-  res.sendStatus(201).json(newPost);
+  res.sendStatus(200).json(newPost);
 });
 
 //CHALLENGE 4: PATCH a post when you just want to update one parameter
+
+app.patch("/posts/:id", (req, res) => {
+  const id = Number(req.params.id);
+
+  const existingPostIndex = posts.findIndex((post) => id === post.id);
+  if (existingPostIndex === -1) {
+    return res.status(404).json({ message: "Post not found" });
+  }
+  const existingPost = posts.find((post) => id === post.id);
+  const updatedPost = {
+    id: id,
+    title: req.body.title || existingPost.title,
+    content: req.body.content || existingPost.content,
+    author: req.body.author || existingPost.author,
+    date: new Date(),
+  };
+  posts[existingPostIndex] = updatedPost;
+  return res.status(200).json(updatedPost);
+});
 
 //CHALLENGE 5: DELETE a specific post by providing the post id.
 
