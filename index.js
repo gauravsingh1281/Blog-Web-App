@@ -46,6 +46,15 @@ app.get("/posts", (req, res) => {
 });
 
 //CHALLENGE 2: GET a specific post by id
+app.get("/posts/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const foundPost = posts.find((post) => id === post.id);
+  if (!foundPost) {
+    res.sendStatus(404).json({ message: "Post not found" });
+  } else {
+    res.json(foundPost);
+  }
+});
 
 //CHALLENGE 3: POST a new post
 
